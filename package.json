@@ -1,13 +1,26 @@
 {
-  "devDependencies": {
-    "sequelize-cli": "^6.4.1",
-    "swagger-jsdoc": "^6.2.0",
-    "swagger-ui-express": "^4.3.0"
+
+  "name": "week6_project_be",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
-    "express": "^4.17.3",
-    "jsonwebtoken": "^8.5.1",
-    "mysql2": "^2.3.3",
-    "sequelize": "^6.18.0"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivryxx/week6_project_BE.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ivryxx/week6_project_BE/issues"
+  },
+  "homepage": "https://github.com/ivryxx/week6_project_BE#readme",
+  
+
+  
+
   }
 }
