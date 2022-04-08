@@ -1,9 +1,13 @@
 {
   "devDependencies": {
+    "sequelize-cli": "^6.4.1",
     "swagger-jsdoc": "^6.2.0",
     "swagger-ui-express": "^4.3.0"
   },
   "dependencies": {
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.18.0"
   }
 }
