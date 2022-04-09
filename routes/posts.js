@@ -3,7 +3,7 @@ const Post = require("../schemas/post");
 const Comment = require("../schemas/comments");
 const router = express.Router();
 const uniqid = require("uniqid");
-const authMiddleware = require("../middlewares/auth");
+const authMiddleware = require("../middlewares/auth-middleware");
 const cors = require("cors");
 
 const corsOptions = {
@@ -30,12 +30,12 @@ router.get("/:postId", async (req, res) => {
   res.json({ post, comments });
 });
 
-router.post("/", async (req, res) => {
+router.post("/", authMiddleware, async (req, res) => {
   // 게시글 저장
   const postId = uniqid();
-  const {userId,
+  const {
+    userId,
     title,
-    userName,
     createdAt,
     category,
     contents,
@@ -44,7 +44,6 @@ router.post("/", async (req, res) => {
     postId,
     userId,
     title,
-    userName,
     createdAt,
     category,
     contents,
