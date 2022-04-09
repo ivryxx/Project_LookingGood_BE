@@ -10,7 +10,7 @@ const postUsersSchema = Joi.object({
   userId: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{2,10}$")).required(),
   password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{4,20}$")).required(),
   confirmPassword: Joi.string().required(),
-  //   userImageUrl: Joi.string().required(),
+  userImageUrl: Joi.string().required(),
 });
 
 //회원가입
@@ -32,7 +32,7 @@ router.post("/signup", async (req, res) => {
       });
     }
 
-    const user = new User({ userId, password });
+    const user = new User({ userId, password, userImageUrl });
     await user.save();
     res.status(201).send({});
   } catch (error) {
