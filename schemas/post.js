@@ -12,10 +12,13 @@ const postSchema = mongoose.Schema({   //Schema 생성
     userId : {     //사용자 이름
         type : String
     },
-    contents : {     //게시글 내용
+    content : {     //게시글 내용
         type : String
     },
     category : {    //카테고리
+        type : String
+    },
+    imageUrl : {    //이미지
         type : String
     }
 
