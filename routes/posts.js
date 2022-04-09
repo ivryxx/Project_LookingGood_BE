@@ -32,20 +32,27 @@ router.get("/:postId", async (req, res) => {
 
 router.post("/", authMiddleware, async (req, res) => {
   // 게시글 저장
+  try {
   const postId = uniqid();
-  const { userId, title, userName, createdAt, category, contents } = req.body;
+  const { userId, title, createdAt, category, content, imageUrl } = req.body;
   await Post.create({
-    postId,
-    userId,
-    title,
-    userName,
-    createdAt,
-    category,
-    contents,
+    postId: postId,
+    userId: userId,
+    title: title,
+    createdAt: createdAt,
+    category: category,
+    content: content,
+    imageUrl: imageUrl
   });
-
-  res.json({ success: "저장이 성공 하였습니다!!" });
+} catch (error) {
+    console.log(`${req.method} ${req.originalUrl} : ${error.message}`);
+    res.status(400).send({
+      errorMessage: "내용확인필요",
+    });
+  }
 });
+//   res.json({ success: "저장이 성공 하였습니다!!" });
+// });
 
 router.delete("/delete/:postId", async (req, res) => {
   //게시글 삭제
