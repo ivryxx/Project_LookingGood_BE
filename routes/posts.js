@@ -40,27 +40,57 @@ router.post("/post", async (req, res) => {
   const date =
     year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
 
-  const { title, price, description } = req.body;
+  const { category, title, userId, imageUrl, content } = req.body;
   await posting.create({
     // item_url: item_url,
+    // postId: postId,
+    category: category,
     title: title,
-    price: price,
-    description: description,
+    userId: userId,
+    imageUrl: imageUrl,
+    content: content,
     date: date,
   });
   res.json({});
+  console.log(postId);
 });
 
 // 게시글 삭제
 
-router.delete("/post/delete/:postId", authmiddlewares, async (req, res) => {
-  await posting.deleteOne({ _id: req.params.itemId });
-  res.json({ message: "삭제가 완료됐습니다." });
+router.delete("/post/delete/:_id", async (req, res) => {
+  const { _id } = req.params;
+  await posting.deleteOne({ _id: _id });
+  res.json({ success: "삭제 성공" });
 });
+
+// router.delete("/:_id", async (req, res) => {
+//   try {
+//     const _id = req.params._id;
+//     // const password = req.body["password"];
+//     const isExist = await Post.findOne({ _id });
+//     if (!isExist || !_id) {
+//       console.log(
+//         `${req.method} ${req.originalUrl} : 일치하지 않는 비밀번호 입니다.`
+//       );
+//       res.status(406).send();
+//       return;
+//     }
+//     await Post.deleteOne({ _id });
+//     res.send({ result: "게시글을 삭제하였습니다." });
+//   } catch (error) {
+//     console.log(`${req.method} ${req.originalUrl} : ${error.message}`);
+//     res.status(400).send();
+//   }
+// });
+
+// router.delete("/post/delete/:postId", async (req, res) => {
+//   await posting.deleteOne({ _id: req.params.userId });
+//   res.json({ message: "삭제가 완료됐습니다." });
+// });
 
 // 게시글 수정
 
-router.put("/post/modify/:postId", authmiddlewares, async (req, res) => {
+router.put("/post/modify/:postId", async (req, res) => {
   const today = new Date();
   const year = today.getFullYear();
   let month = today.getMonth() + 1;
@@ -78,14 +108,17 @@ router.put("/post/modify/:postId", authmiddlewares, async (req, res) => {
   const date =
     year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
 
-  const { item_url, title, price, description } = req.body;
+  const { category, title, userId, imageUrl, content } = req.body;
   await posting
     .findByIdAndUpdate(req.params.itemId, {
       $set: {
-        item_url: item_url,
+        // item_url: item_url,
+        // postId: postId,
+        category: category,
         title: title,
-        price: price,
-        description: description,
+        userId: userId,
+        imageUrl: imageUrl,
+        content: content,
         date: date,
       },
     })
