@@ -1,12 +1,12 @@
 const express = require('express')
 const Mongoose = require('mongoose')
 const Comments = require('../routes/comments')
-const authMiddleware = require('../middlewares/auth-middleware')
+// const authMiddleware = require('../middlewares/auth-middleware')
 
 const router = express.Router()
 
 //댓글 작성
-router.post('/:comments/{postId}', authMiddleware, async (req, res) => {
+router.post('/:comments/:postId', authMiddleware, async (req, res) => {
   const { postId } = req.body
   const { comment } = req.body
   const { user } = res.locals
@@ -31,7 +31,7 @@ router.post('/:comments/{postId}', authMiddleware, async (req, res) => {
 
 //댓글 삭제
 router.delete(
-    '/comments/{commentId}',
+    '/comments/:commentId',
     authMiddleware,
     async (req, res) => {
       const { postId, commentId } = req.params
