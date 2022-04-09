@@ -1,6 +1,6 @@
 const express = require("express");
 const Post = require("../schemas/post");
-const Comment = require("../schemas/comments");
+const Comment = require("../schemas/comment");
 const router = express.Router();
 const uniqid = require("uniqid");
 const authMiddleware = require("../middlewares/auth-middleware");
@@ -30,21 +30,21 @@ router.get("/:postId", async (req, res) => {
   res.json({ post, comments });
 });
 
-router.post("/", authMiddleware, async (req, res) => {
+router.post("/post", authMiddleware, async (req, res) => {
   // 게시글 저장
   try {
-  const postId = uniqid();
-  const { userId, title, createdAt, category, content, imageUrl } = req.body;
-  await Post.create({
-    postId: postId,
-    userId: userId,
-    title: title,
-    createdAt: createdAt,
-    category: category,
-    content: content,
-    imageUrl: imageUrl
-  });
-} catch (error) {
+    const postId = uniqid();
+    const { userId, title, createdAt, category, content, imageUrl } = req.body;
+    await Post.create({
+      postId: postId,
+      userId: userId,
+      title: title,
+      createdAt: createdAt,
+      category: category,
+      content: content,
+      imageUrl: imageUrl,
+    });
+  } catch (error) {
     console.log(`${req.method} ${req.originalUrl} : ${error.message}`);
     res.status(400).send({
       errorMessage: "내용확인필요",
