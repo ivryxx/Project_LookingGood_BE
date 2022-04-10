@@ -15,15 +15,11 @@
 </body>
 </html>
 
-라우터
-app.get('/upload', function(req, res){
-    res.render('upload');
-  });
-  
-  app.post('/upload', function(req, res){
-    res.send('업로드 성공!');
-  });
 
+
+
+
+  
 app.js
 const multer = require('multer')
 let storage = multer.diskStorage({
@@ -44,3 +40,12 @@ app.use('/users', express.static('uploads'));
 app.listen(5000, () => {
     console.log("서버가 요청을 받을 준비가 되었어요!")
 })
+
+
+app.get('/upload', function(req, res){
+  res.render('upload');
+});
+
+app.post('/upload', function(req, res){
+  res.send('업로드 성공!');
+});
