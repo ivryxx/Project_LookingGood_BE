@@ -1,4 +1,4 @@
-# Project_LookingGood_BE# LOOKING GOOD! (mini project 1)
+# Project_LookingGood_BE# 
 
 
 ## 👋 프로젝트 소개
@@ -28,7 +28,8 @@
 <br/>
 <br/>
 
-## 🎨 프로젝트 초안
+## 🎨 프로젝트 와이어프레임
+  https://s3.us-west-2.amazonaws.com/secure.notion-static.com/e071c6c2-bcb1-4f2c-94d7-29827365cb83/%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220410%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220410T175236Z&X-Amz-Expires=86400&X-Amz-Signature=b82952b96d76eca7dae101a02f5ad03fc080040a29064e440dba397863e5c6e8&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22%25EC%2599%2580%25EC%259D%25B4%25EC%2596%25B4%25ED%2594%2584%25EB%25A0%2588%25EC%259E%2584.pdf%22&x-id=GetObject
 
 
 <br/>
