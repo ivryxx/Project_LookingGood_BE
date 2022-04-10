@@ -1,9 +1,8 @@
-//express 모듈 불러오기
 const express = require("express");
 const connect = require("./schemas");
 const cors = require("cors");
 const app = express();
-// const port = 3000;
+const port = 3000;
 
 connect();
 
@@ -18,6 +17,6 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/api", [postsRouter, usersRouter, commentsRouter]);
 
-app.listen(7000, () => {
-  console.log("서버가 정상적으로 켜졌습니다.");
+app.listen(port, () => {
+  console.log(port, "포트가 켜졌습니다.");
 });
