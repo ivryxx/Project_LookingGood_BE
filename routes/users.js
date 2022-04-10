@@ -52,7 +52,7 @@ router.post("/login", async (req, res) => {
       errorMessage: "아이디 또는 비밀번호를 확인해주세요.",
     });
   }
-  const token = jwt.sign({ userId: user.userId }, "lookingGood6");
+  const token = jwt.sign({ userId: user.userId }, process.env.SECRET_KEY);
   res.send({ token });
 });
 

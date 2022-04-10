@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const router = express.Router();
 const authmiddlewares = require("../middlewares/auth-middleware");
 // const UserController = require("../controllers/userController");
-const posting = require("../schemas/post");
+const Post = require("../schemas/post");
 // const upload = require('../modules/multer');
 
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -41,7 +41,7 @@ router.post("/post", async (req, res) => {
     year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
 
   const { category, title, userId, imageUrl, content } = req.body;
-  await posting.create({
+  await Post.create({
     // item_url: item_url,
     // postId: postId,
     category: category,
@@ -51,7 +51,7 @@ router.post("/post", async (req, res) => {
     content: content,
     date: date,
   });
-  res.json({category, title, userId, imageUrl, content});
+  res.json({ category, title, userId, imageUrl, content });
   console.log(postId);
 });
 
@@ -59,7 +59,7 @@ router.post("/post", async (req, res) => {
 
 router.delete("/post/delete/:_id", async (req, res) => {
   const { _id } = req.params;
-  await posting.deleteOne({ _id: _id });
+  await Post.deleteOne({ _id: _id });
   res.json({ success: "삭제 성공" });
 });
 
@@ -84,13 +84,13 @@ router.delete("/post/delete/:_id", async (req, res) => {
 // });
 
 // router.delete("/post/delete/:postId", async (req, res) => {
-//   await posting.deleteOne({ _id: req.params.userId });
+//   await Post.deleteOne({ _id: req.params.userId });
 //   res.json({ message: "삭제가 완료됐습니다." });
 // });
 
 // 게시글 수정
 
-router.put("/post/modify/:postId", async (req, res) => {
+router.put("/post/modify/:_Id", async (req, res) => {
   const today = new Date();
   const year = today.getFullYear();
   let month = today.getMonth() + 1;
@@ -109,36 +109,33 @@ router.put("/post/modify/:postId", async (req, res) => {
     year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
 
   const { category, title, userId, imageUrl, content } = req.body;
-  await posting
-    .findByIdAndUpdate(req.params.itemId, {
-      $set: {
-        // item_url: item_url,
-        // postId: postId,
-        category: category,
-        title: title,
-        userId: userId,
-        imageUrl: imageUrl,
-        content: content,
-        date: date,
-      },
-    })
-    .exec();
+  await Post.findByIdAndUpdate(req.params._Id, {
+    $set: {
+      // postId: postId,
+      category: category,
+      title: title,
+      userId: userId,
+      imageUrl: imageUrl,
+      content: content,
+      date: date,
+    },
+  }).exec();
   res.json({ message: "수정이 완료됐습니다." });
 });
 
 // 전체 게시글 조회 //
 
 router.get("/post", async (req, res) => {
-  const postings = await posting.find();
-  res.json({ list: postings });
+  const Posts = await Post.find();
+  res.json({ list: Posts });
 });
 
 // 상세 페이지 접속
 
-router.get("/post/:postId", async (req, res) => {
-  const postings = await posting.findById(req.params.itemId);
-  // const comment = await comments.find({ itemId });
-  res.json({ list: postings /*, comment*/ });
+router.get("/post/:_Id", async (req, res) => {
+  const Posts = await Post.findById(req.params.userId);
+  // const comment = await comments.find({ userId });
+  res.json({ list: Posts /*, comment*/ });
 });
 
 module.exports = router;
