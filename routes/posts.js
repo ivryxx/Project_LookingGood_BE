@@ -133,7 +133,7 @@ router.get("/post", async (req, res) => {
 // 상세 페이지 접속
 
 router.get("/post/:_Id", async (req, res) => {
-  const Posts = await Post.findById(req.params.userId);
+  const Posts = await Post.findById(req.params._Id);
   // const comment = await comments.find({ userId });
   res.json({ list: Posts /*, comment*/ });
 });

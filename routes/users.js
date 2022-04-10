@@ -18,7 +18,7 @@ router.post("/signup", async (req, res) => {
   try {
     const { userId, password, confirmPassword, userImageUrl } =
       await postUsersSchema.validateAsync(req.body);
-
+    console.log(userImageUrl);
     if (password !== confirmPassword) {
       return res.status(400).send({
         errorMessage: "패스워드가 패스워드 확인란과 동일하지 않습니다.",

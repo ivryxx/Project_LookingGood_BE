@@ -31,8 +31,8 @@
         const userImageUrl = $("#userImageUrl").val();
         $.ajax({
           type: "POST",
-          url: "/api/users",
-          data: { nickname, password, confirmPassword, userImageUrl },
+          url: "/api/signup",
+          data: { userId, password, confirmPassword },
           success: function (response) {
             alert("환영합니다!");
             window.location.href = "/login.html";
@@ -47,11 +47,6 @@
   </head>
 
   <body>
-    <div class="header">
-      <a href="/board.html">
-        <h1>Node js 게시판</h1>
-      </a>
-    </div>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
@@ -70,7 +65,7 @@
       <div class="row">
         <div class="col-sm">
           <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon1">닉네임</span>
+            <span class="input-group-text" id="basic-addon1">이름</span>
             <input
               type="text"
               class="form-control"
@@ -116,6 +111,25 @@
               aria-label="Username"
               aria-describedby="basic-addon1"
               id="confirmPassword"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm">
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1"
+              >프로필 이미지</span
+            >
+            <input
+              type="text"
+              class="form-control"
+              placeholder="이미지 URL을 입력하세요"
+              aria-label="Username"
+              aria-describedby="basic-addon1"
+              id="userImageUrl"
             />
           </div>
         </div>
