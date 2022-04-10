@@ -52,7 +52,7 @@
 -   Server: AWS EC2 (Ubuntu 18.04 LTS)
 -   Framework: Express 
 -   Database: MongoDB
--   LAnguage: Javascript
+-   Lnguage: Javascript
 -   Tool : Git, Notion
 -   Platform : Node.js
 
