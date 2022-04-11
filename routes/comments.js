@@ -5,8 +5,10 @@ const Comments = require('../routes/comments')
 
 const router = express.Router()
 
+
+
 //댓글 작성
-router.post('/:comments/:postId', authMiddleware, async (req, res) => {
+router.post('/:comments/:postId', async (req, res) => {
   const { postId } = req.body
   const { comment } = req.body
   const { user } = res.locals
