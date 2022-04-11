@@ -3,6 +3,7 @@ const User = require("../schemas/user");
 const router = express.Router();
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
+const jwtSecret = process.env.SECRET_KEY;
 const authMiddleware = require("../middlewares/auth-middleware");
 
 //회원가입 양식
@@ -52,7 +53,7 @@ router.post("/login", async (req, res) => {
       errorMessage: "아이디 또는 비밀번호를 확인해주세요.",
     });
   }
-  const token = jwt.sign({ userId: user.userId }, "lookingGood6");
+  const token = jwt.sign({ userId: user.userId }, `${jwtSecret}`);
   res.send({ token });
 });
 
