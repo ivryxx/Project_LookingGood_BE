@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
 const postSchema = new mongoose.Schema({
-  //   postId: {
-  //     type: String,
-  //     unique: true, //유니크 값
-  //     required: true, //필수 값
-  //   },
+  // postId: {
+  //   type: String,
+  //   unique: true, //유니크 값
+  //   required: true, //필수 값
+  // },
   title: {
     //게시글 제목
     type: String,
@@ -26,6 +26,9 @@ const postSchema = new mongoose.Schema({
     //이미지
     type: String,
   },
+  // author:{
+  //   type:String,
+  // }
   date: {
     type: String,
   },

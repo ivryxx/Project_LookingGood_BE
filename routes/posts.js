@@ -2,8 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const router = express.Router();
 const authmiddlewares = require("../middlewares/auth-middleware");
-// const UserController = require("../controllers/userController");
 const Post = require("../schemas/post");
+// const UserController = require("../controllers/userController");
 // const upload = require('../modules/multer');
 
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -11,18 +11,18 @@ router.use(bodyParser.json());
 
 // 이미지 파일 AWS S3 저장
 
-// router.post(
-//   '/imgs',
-//   upload.single('image'),
-//   UserController.uploadImage,
-//   (req, res) => {
-//     res.send({});
-//   }
-// );
+router.post(
+  "/imgs",
+  upload.single("image"),
+  UserController.uploadImage,
+  (req, res) => {
+    res.send({});
+  }
+);
 
 // 게시글 작성 //
 
-router.post("/post", async (req, res) => {
+router.post("/post", authmiddlewares, async (req, res) => {
   const today = new Date();
   const year = today.getFullYear();
   let month = today.getMonth() + 1;
@@ -40,26 +40,34 @@ router.post("/post", async (req, res) => {
   const date =
     year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
 
-  const { category, title, userId, imageUrl, content } = req.body;
+  // const maxNumber = await posts.findOne().sort("-postsNum");
+  // let postsNum = 1;
+  // if (maxNumber) {
+  //   postsNum = maxNumber.postsNum + 1;
+  // }
+  // const maxNumber = await Article.findOne().sort("-articleNum");
+  // let articleNum = 1;
+  //  if (maxNumber) { articleNum = maxNumber.articleNum + 1; }
+
+  // const author = res.locals.user[0].userId;
+
+  const { category, title, imageUrl, content } = req.body;
   await Post.create({
-    // item_url: item_url,
     // postId: postId,
     category: category,
     title: title,
-    userId: userId,
     imageUrl: imageUrl,
     content: content,
     date: date,
   });
-  res.json({ category, title, userId, imageUrl, content });
-  console.log(postId);
+  res.json({});
 });
 
 // 게시글 삭제
 
-router.delete("/post/delete/:_id", async (req, res) => {
+router.delete("/post/delete/:postId", authmiddlewares, async (req, res) => {
   const { _id } = req.params;
-  await Post.deleteOne({ _id: _id });
+  await Post.deleteOne({ _id: postId });
   res.json({ success: "삭제 성공" });
 });
 
@@ -90,7 +98,7 @@ router.delete("/post/delete/:_id", async (req, res) => {
 
 // 게시글 수정
 
-router.put("/post/modify/:_Id", async (req, res) => {
+router.put("/post/modify/:_Id", authmiddlewares, async (req, res) => {
   const today = new Date();
   const year = today.getFullYear();
   let month = today.getMonth() + 1;

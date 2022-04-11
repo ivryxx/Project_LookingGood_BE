@@ -29,12 +29,12 @@
         const password = $("#password").val();
         $.ajax({
           type: "POST",
-          url: "/api/auth",
-          data: { nickname, password },
+          url: "/api/login",
+          data: { userId, password },
           success: function (response) {
             alert("반갑습니다");
             localStorage.setItem("token", response.token);
-            window.location.href = "/board.html";
+            window.location.href = "/postList.html";
           },
           error: function (xhr) {
             const err = eval("(" + xhr.responseText + ")");
@@ -45,12 +45,6 @@
     </script>
   </head>
   <body>
-    <div class="header">
-      <a href="/board.html">
-        <h1>Node js 게시판</h1>
-      </a>
-    </div>
-
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
@@ -85,7 +79,7 @@
               placeholder=""
               aria-label="Username"
               aria-describedby="basic-addon1"
-              id="nickname"
+              id="userId"
             />
           </div>
         </div>

@@ -3,6 +3,7 @@ const User = require("../schemas/user");
 const router = express.Router();
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
+const jwtSecret = process.env.SECRET_KEY;
 const authMiddleware = require("../middlewares/auth-middleware");
 
 //회원가입 양식
@@ -18,7 +19,7 @@ router.post("/signup", async (req, res) => {
   try {
     const { userId, password, confirmPassword, userImageUrl } =
       await postUsersSchema.validateAsync(req.body);
-    console.log(userImageUrl);
+
     if (password !== confirmPassword) {
       return res.status(400).send({
         errorMessage: "패스워드가 패스워드 확인란과 동일하지 않습니다.",
@@ -52,7 +53,7 @@ router.post("/login", async (req, res) => {
       errorMessage: "아이디 또는 비밀번호를 확인해주세요.",
     });
   }
-  const token = jwt.sign({ userId: user.userId }, process.env.SECRET_KEY);
+  const token = jwt.sign({ userId: user.userId }, `${jwtSecret}`);
   res.send({ token });
 });
 
