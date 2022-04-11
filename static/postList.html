@@ -48,15 +48,11 @@
             const posts = response.list;
             console.log(response);
             for (const post of posts) {
-              // const id = post._id;
-              // const category = post.category;
-              // const title = post.title;
-              // const imageUrl = post.imageUrl;
-              // const content = post.content;
-              // const date = post.date;
               const temp_html = `<div class="card-group">
                                     <div class="card" id="getPost">
+                                      <a href="/detail.html?postId=${post._id}">
                                       <img src=${post.imageUrl} class="card-img-top" alt="..." />
+                                      </a>
                                       <div class="card-body">
                                         <h5 class="card-title">${post.title}</h5>
                                         <p class="card-text">${post.content}</p>
@@ -164,7 +160,9 @@
 
     <div class="card-group">
       <div class="card" id="getPost">
-        <img src="..." class="card-img-top" alt="..." />
+        <a href="/detail.html?postId=${id}">
+          <img src="..." class="card-img-top" alt="..." />
+        </a>
         <div class="card-body">
           <h5 class="card-title">Card title</h5>
           <p class="card-text">내용</p>
