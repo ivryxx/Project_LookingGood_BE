@@ -1,66 +1,22 @@
-const express = require('express')
-const mongoose = require('mongoose')
+const express = require("express");
+const connect = require("./schemas");
+const cors = require("cors");
+const app = express();
 const port = 3000;
 
-const app = express();
+connect();
 
+const postsRouter = require("./routes/posts");
+const usersRouter = require("./routes/users");
+const commentsRouter = require("./routes/comments");
 
-// const multer = require('multer');
+app.use(cors());
+app.use(express.static("static"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-// const filestorageEngine =mulert.distorage({
-//     destination : (req, file, cb) => {
-//         cb(null, './images');
-//     },
-//     filename : (req, file, cb) => {
-//         cb(null, Date.now() +'--' file.originalname);
-//     },
-// });
-
-// const upload = multer({storage : filestorageEngine});
-
-// app.post(/single',upload.single('image') ,(req,res)=> {
-//     res.send("single file upload success");
-// });
-
-
-
-
-
-
-
-
-
-
-// const multer = require('multer')
-// let storage = multer.diskStorage({
-//   destination(req, file, cb) {
-//     cb(null, 'uploads/');
-//   },
-//   filename(req, file, cb)  {
-//     cb(null, `${Date.now()}_${file.originalname}`);
-//   }
-// });
-// let upload = multer({dest: 'uploads/'});
-// let toImage = multer({storage: storage});
-
-
-app.get('/upload', function(req, res){
-    res.render('upload');
-  });
-  
-  app.post('/upload', function(req, res){
-    res.send('업로드 성공!');
-  });
-
-
-
-app.use('/users', express.static('uploads'));
-
-
+app.use("/api", [postsRouter, usersRouter, commentsRouter]);
 
 app.listen(port, () => {
-    console.log(port, '포트로 서버가 열렸어요!');
-  });
-
-
- 
+  console.log(port, "포트가 켜졌습니다.");
+});
