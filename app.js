@@ -25,7 +25,7 @@ app.post("/upload", function (req, res) {
   res.send("업로드 성공!");
 });
 
-app.js;
+// app.js;
 const multer = require("multer");
 let storage = multer.diskStorage({
   destination(req, file, cb) {

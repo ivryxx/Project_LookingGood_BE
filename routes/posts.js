@@ -60,7 +60,7 @@ router.post("/post", authmiddlewares, async (req, res) => {
     content: content,
     date: date,
   });
-  res.json({});
+  res.json({ category, title, imageUrl, content });
 });
 
 // 게시글 삭제
