@@ -13,9 +13,9 @@ const commentsSchema = new Schema({
     type: String,
     // required: true,
   },
-  postId: {
-    type: String,
-  },
+  // postId: {
+  //   type: String,
+  // },
   comment: {
     type: String,
   },

@@ -3,17 +3,28 @@ const router = express.Router();
 const Comment = require("../schemas/comment");
 // const auth_middleware = require("../middlewares/auth-middleware");
 
+
+
+
+
+
+
 // 댓글 저장
-router.post("/comment/save/:id", async (req, res) => {
+router.post("/comment/:id", async (req, res) => {
+  const { id } =res.params;
   const { user } = res.locals;
   // console.log(user);
-  const { user_comment, createDate } = req.body;
+  const userId = user.userId;
+  const commentId = user.commentId;
+  const { comment, createDate } = req.body;
 
   await Comment.create({
-    user_nick: user.user_nick,
-    user_comment,
+    postId : Number(id),
+    userId,
     createDate,
-    articleId: req.params.id,
+    commentId,
+    comment,
+    userImageUrl,
   });
 
   res.json({
@@ -22,7 +33,7 @@ router.post("/comment/save/:id", async (req, res) => {
 });
 
 //댓글 조회
-router.get("/comment/get/:id", async (req, res) => {
+router.get("/comment/:id", async (req, res) => {
   const { id } = req.params;
 
   const comment_list = await Comment.find({ articleId: id })
@@ -42,3 +53,4 @@ router.get("/comment/get/:id", async (req, res) => {
 });
 
 module.exports = router;
+

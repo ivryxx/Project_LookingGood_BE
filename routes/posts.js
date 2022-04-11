@@ -11,14 +11,14 @@ router.use(bodyParser.json());
 
 // 이미지 파일 AWS S3 저장
 
-router.post(
-  "/imgs",
-  upload.single("image"),
-  UserController.uploadImage,
-  (req, res) => {
-    res.send({});
-  }
-);
+// router.post(
+//   "/imgs",
+//   upload.single("image"),
+//   UserController.uploadImage,
+//   (req, res) => {
+//     res.send({});
+//   }
+// );
 
 // 게시글 작성 //
 
