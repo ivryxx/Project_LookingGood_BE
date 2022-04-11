@@ -1,16 +1,14 @@
 const mongoose = require("mongoose");
-
+require("dotenv").config();
 const connect = () => {
   mongoose
-    .connect(
-      "mongodb+srv://lookingGood:1234qwer@cluster0.cpnlv.mongodb.net/",
-      {}
-    )
+    .connect(process.env.DB_NAME, {
+      ignoreUndefined: true,
+    })
     .catch((err) => console.log(err));
 };
-
 mongoose.connection.on("error", (err) => {
-  console.log("몽고디비 연결 에러", err);
+  console.error("몽고디비 연결 에러", err);
 });
 
 module.exports = connect;
