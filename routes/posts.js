@@ -11,14 +11,14 @@ router.use(bodyParser.json());
 
 // 이미지 파일 AWS S3 저장
 
-router.post(
-  "/imgs",
-  upload.single("image"),
-  UserController.uploadImage,
-  (req, res) => {
-    res.send({});
-  }
-);
+// router.post(
+//   "/imgs",
+//   upload.single("image"),
+//   UserController.uploadImage,
+//   (req, res) => {
+//     res.send({});
+//   }
+// );
 
 // 게시글 작성 //
 
@@ -116,16 +116,16 @@ router.put("/post/modify/:_Id", authmiddlewares, async (req, res) => {
   const date =
     year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
 
-  const { category, title, userId, imageUrl, content } = req.body;
+  const { title, imageUrl, content } = req.body;
   await Post.findByIdAndUpdate(req.params._Id, {
     $set: {
       // postId: postId,
-      category: category,
+      // category: category,
       title: title,
-      userId: userId,
+      // userId: userId,
       imageUrl: imageUrl,
       content: content,
-      date: date,
+      date: date
     },
   }).exec();
   res.json({ message: "수정이 완료됐습니다." });

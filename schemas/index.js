@@ -1,13 +1,10 @@
 const mongoose = require("mongoose");
-
+require("dotenv").config();
 const connect = () => {
   mongoose
-    .connect(
-      "mongodb+srv://lookingGood:1234qwer@cluster0.cpnlv.mongodb.net/",
-      {
-        ignoreUndefined: true,
-      }
-    )
+    .connect(process.env.DB_NAME, {
+      ignoreUndefined: true,
+    })
     .catch((err) => console.log(err));
 };
 mongoose.connection.on("error", (err) => {
