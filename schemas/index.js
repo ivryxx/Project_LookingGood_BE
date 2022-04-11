@@ -1,15 +1,11 @@
 const mongoose = require("mongoose");
-// require("dotenv").config();
+require("dotenv").config();
 
 const DB = process.env.DB_NAME;
-console.log(DB);
+
+
 const connect = () => {
-  mongoose
-    .connect(
-      "mongodb+srv://lookingGood:1234qwer@cluster0.cpnlv.mongodb.net/",
-      {}
-    )
-    .catch((err) => console.log(err));
+  mongoose.connect(DB, {}).catch((err) => console.log(err));
 };
 
 mongoose.connection.on("error", (err) => {
