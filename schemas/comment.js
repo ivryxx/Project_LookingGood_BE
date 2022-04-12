@@ -5,22 +5,25 @@ const { Schema } = mongoose
 const commentsSchema = new Schema({
   // _id: Schema.Types.ObjectId,
 
-  userId: {
+  userId: {               
+    type: String,
+    // required: true,
+  },  
+  commentId: {            
     type: String,
     // required: true,
   },
-  commentId: {
+  postId: {              
     type: String,
-    // required: true,
   },
-  // postId: {
-  //   type: String,
-  // },
   comment: {
     type: String,
   },
   userImageUrl: {
     type: String,
+  },
+  createAt : {
+    type: String
   }
 })
 

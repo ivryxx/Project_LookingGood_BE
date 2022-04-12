@@ -6,8 +6,12 @@ const Post = require("../schemas/post");
 // const UserController = require("../controllers/userController");
 // const upload = require('../modules/multer');
 
+
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
+
+
+
 
 // 이미지 파일 AWS S3 저장
 
