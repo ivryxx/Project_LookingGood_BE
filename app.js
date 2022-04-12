@@ -1,4 +1,5 @@
 const express = require("express");
+const multer = require("multer");
 const connect = require("./schemas");
 const cors = require("cors");
 const app = express();
@@ -25,20 +26,44 @@ app.post("/upload", function (req, res) {
   res.send("업로드 성공!");
 });
 
-app.js;
-const multer = require("multer");
-let storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename(req, file, cb) {
-    cb(null, `${Date.now()}_${file.originalname}`);
-  },
-});
-let upload = multer({ dest: "uploads/" });
-let toImage = multer({ storage: storage });
 
-app.use("/users", express.static("uploads"));
+
+// const upload = multer({
+//   storage: multer.diskStorage({
+//     destination(req, file, cb) {
+//       console.log("file!!!", file);
+//       cb(null, "uploads");
+//     },
+//     filename(req, file, cb) {
+//       const ext = path.extname(file.originalname);
+//       cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
+//     },
+//   }),
+//   limits: { fileSize: 5 * 1024 * 1024 },
+// });
+
+
+
+
+let fileStorageEngine = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, "./images");
+  },
+  filename: (req, file, cd) =>
+  cd(null, Date.now() + '--' + file.originalname)
+  });
+
+  const upload = multer({ storage: fileStorageEngine })
+
+  app.post("/single", upload.single('image'),(req, res) => {
+    console.log(req.file);
+    res.send("Single File upload success");
+  });
+
+  // app.post("/multiple", upload.array('images', 3),(req, res) => {
+  //   console.log(req.files);
+  //   res.send("Multiple Files Upload Success")
+  // })
 
 app.listen(port, () => {
   console.log(port, "포트가 켜졌습니다.");

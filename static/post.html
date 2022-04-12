@@ -81,6 +81,7 @@
       </div>
     </div>
     <div class="container">
+      
       <div class="row">
         <div class="col-sm">
           <div class="input-group mb-3">
@@ -98,6 +99,7 @@
       </div>
     </div>
     <div class="container">
+      <form action="/single" method="POST" enctype="multipart/form-data">
       <div class="row">
         <div class="col-sm">
           <div class="input-group mb-3">
@@ -105,14 +107,15 @@
               <span class="input-group-text" id="basic-addon3">이미지</span>
             </div>
             <input
-              type="text"
+              type="file"
+              name="image"
               class="form-control"
-              id="imageUrl"
               aria-describedby="basic-addon3"
             />
           </div>
         </div>
       </div>
+      </form>
     </div>
     <div class="container">
       <div class="row">
