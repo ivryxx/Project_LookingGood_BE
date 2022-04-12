@@ -3,8 +3,6 @@
 
 ## 부제: 좋은 것 같은데요?
 
-# Project_LookingGood_BE# 
-
 
 
 ## 👋 프로젝트 소개
