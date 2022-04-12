@@ -4,7 +4,7 @@ const Comment = require("../schemas/comment");
 const authMiddleware = require("../middlewares/auth-middleware");
 
 // 댓글 저장
-router.post("/comments/save/:_Id", authMiddleware, async (req, res) => {
+router.post("/comments/save/:postId", authMiddleware, async (req, res) => {
   const { user } = res.locals;
   console.log(user);
   const { comment, createAt, userImageUrl } = req.body;

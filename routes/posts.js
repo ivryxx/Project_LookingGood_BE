@@ -3,8 +3,10 @@ const bodyParser = require("body-parser");
 const router = express.Router();
 const authmiddlewares = require("../middlewares/auth-middleware");
 const Post = require("../schemas/post");
-// const UserController = require("../controllers/userController");
-// const upload = require('../modules/multer');
+// const UserController = require("../controllesrs/userController");
+const upload = require('../modules/multer');
+const req = require("express/lib/request");
+const res = require("express/lib/response");
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -12,17 +14,36 @@ router.use(bodyParser.json());
 // 이미지 파일 AWS S3 저장
 
 // router.post(
-//   "/imgs",
-//   upload.single("image"),
-//   UserController.uploadImage,
-//   (req, res) => {
-//     res.send({});
-//   }
-// );
+//   "/single",
+//   upload.single("imageUrl"), async (req, res) => {
+//     const file = await req.file;
+//     console.log(file)
+//     try {
+//       const result = await file.location;
+//       res.status(200).json({ imageUrl: result })
+//     } catch (e) {
+//       console.log(e)
+//     }
+
+//   });
+
+// UserController.uploadImage,
+
+router.post('/single', upload.single('imageUrl'), async (req, res) => {
+  const file = await req.file;
+  console.log(file);
+  try {
+    const result = await file.location;
+    console.log(result)
+    res.status(200).json({ imageUrl: result })
+  } catch (e) {
+
+  }
+});
 
 // 게시글 작성 //
 
-router.post("/post", authmiddlewares, async (req, res) => {
+router.post("/post", authmiddlewares, upload.single('imageUrl'), async (req, res) => {
   const today = new Date();
   const year = today.getFullYear();
   let month = today.getMonth() + 1;
@@ -40,23 +61,15 @@ router.post("/post", authmiddlewares, async (req, res) => {
   const date =
     year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
 
-  // const maxNumber = await posts.findOne().sort("-postsNum");
-  // let postsNum = 1;
-  // if (maxNumber) {
-  //   postsNum = maxNumber.postsNum + 1;
-  // }
-  // const maxNumber = await Article.findOne().sort("-articleNum");
-  // let articleNum = 1;
-  //  if (maxNumber) { articleNum = maxNumber.articleNum + 1; }
+  const imageUrl = req.file.location
+  const { category, title, content } = req.body;
+  // let { user } = res.locals;
 
-  // const author = res.locals.user[0].userId;
-
-  const { category, title, imageUrl, content } = req.body;
   await Post.create({
     // postId: postId,
     category: category,
     title: title,
-    imageUrl: imageUrl,
+    imageUrl,
     content: content,
     date: date,
   });
@@ -116,8 +129,9 @@ router.get("/post", async (req, res) => {
 
 // 상세 페이지 접속
 
-router.get("/post/:_Id", async (req, res) => {
-  const Posts = await Post.findById(req.params._Id);
+router.get("/post/:postId", async (req, res) => {
+  console.log(req.params)
+  const Posts = await Post.findById(req.params.postId);
   // const comment = await comments.find({ userId });
   res.json({ list: Posts /*, comment*/ });
 });
