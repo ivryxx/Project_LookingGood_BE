@@ -6,8 +6,10 @@ const multerS3 = require("multer-s3");
 const router = express.Router();
 const authmiddlewares = require("../middlewares/auth-middleware");
 const Post = require("../schemas/post");
-// const UserController = require("../controllers/userController");
-// const upload = require('../modules/multer');
+// const UserController = require("../controllesrs/userController");
+const upload = require('../modules/multer');
+const req = require("express/lib/request");
+const res = require("express/lib/response");
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -15,42 +17,36 @@ router.use(bodyParser.json());
 // 이미지 파일 AWS S3 저장
 
 // router.post(
-//   "/imgs",
-//   upload.single("image"),
-//   UserController.uploadImage,
-//   (req, res) => {
-//     res.send({});
-//   }
-// );
+//   "/single",
+//   upload.single("imageUrl"), async (req, res) => {
+//     const file = await req.file;
+//     console.log(file)
+//     try {
+//       const result = await file.location;
+//       res.status(200).json({ imageUrl: result })
+//     } catch (e) {
+//       console.log(e)
+//     }
+
+//   });
+
+// UserController.uploadImage,
+
+router.post('/single', upload.single('imageUrl'), async (req, res) => {
+  const file = await req.file;
+  console.log(file);
+  try {
+    const result = await file.location;
+    console.log(result)
+    res.status(200).json({ imageUrl: result })
+  } catch (e) {
+
+  }
+});
 
 // 게시글 작성 //
 
-let s3 = new aws.S3({
-  accessKeyId: "AKIASZONATOAZMARYUSU",
-  secretAccessKey: "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",
-});
-
-s3.getObject({ Bucket: "lookinggood", Key: "1649765198988" }, (err, data) => {
-  if (err) console.error(err);
-  console.log(data);
-  require("fs").writeFileSync("./result.png", data.Body.toString("base64"), {
-    encoding: "base64",
-  });
-});
-const upload = multer({
-  storage: multerS3({
-    s3: s3,
-    bucket: "lookinggood",
-    // acl: "public-read",
-    metadata: function (req, file, cb) {
-      cb(null, { fieldName: file.fieldname });
-    },
-    key: function (req, file, cb) {
-      cb(null, Date.now().toString());
-    },
-  }),
-});
-router.post("/post", upload.single("image"), authmiddlewares, async (req, res) => {
+router.post("/post", authmiddlewares, upload.single('imageUrl'), async (req, res) => {
   const today = new Date();
   const year = today.getFullYear();
   let month = today.getMonth() + 1;
@@ -68,55 +64,33 @@ router.post("/post", upload.single("image"), authmiddlewares, async (req, res) =
   const date =
     year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
 
+  const imageUrl = req.file.location
   const { category, title, content } = req.body;
-  const image = req.file.location;
-  console.log(category, title, content,)
+  // let { user } = res.locals;
+
   await Post.create({
     category: category,
     title: title,
+    imageUrl,
     content: content,
     date: date,
     image: image
   });
-  res.json({ category, title, content, image });
+  res.json({ category, title, imageUrl, content });
 });
 
 // 게시글 삭제
 
-router.delete("/post/delete/:postId", authmiddlewares, async (req, res) => {
-  const { _id } = req.params;
-  await Post.deleteOne({ _id: postId });
+router.delete("/post/delete/:_Id", authmiddlewares, async (req, res) => {
+  await Post.deleteOne({ _id: req.params.postId })
+
   res.json({ success: "삭제 성공" });
 });
 
-// router.delete("/:_id", async (req, res) => {
-//   try {
-//     const _id = req.params._id;
-//     // const password = req.body["password"];
-//     const isExist = await Post.findOne({ _id });
-//     if (!isExist || !_id) {
-//       console.log(
-//         `${req.method} ${req.originalUrl} : 일치하지 않는 비밀번호 입니다.`
-//       );
-//       res.status(406).send();
-//       return;
-//     }
-//     await Post.deleteOne({ _id });
-//     res.send({ result: "게시글을 삭제하였습니다." });
-//   } catch (error) {
-//     console.log(`${req.method} ${req.originalUrl} : ${error.message}`);
-//     res.status(400).send();
-//   }
-// });
-
-// router.delete("/post/delete/:postId", async (req, res) => {
-//   await Post.deleteOne({ _id: req.params.userId });
-//   res.json({ message: "삭제가 완료됐습니다." });
-// });
 
 // 게시글 수정
 
-router.put("/post/modify/:_Id", authmiddlewares, async (req, res) => {
+router.put("/post/put/:_Id", authmiddlewares, async (req, res) => {
   const today = new Date();
   const year = today.getFullYear();
   let month = today.getMonth() + 1;
@@ -158,8 +132,9 @@ router.get("/post", async (req, res) => {
 
 // 상세 페이지 접속
 
-router.get("/post/:_Id", async (req, res) => {
-  const Posts = await Post.findById(req.params._Id);
+router.get("/post/:postId", async (req, res) => {
+  console.log(req.params)
+  const Posts = await Post.findById(req.params.postId);
   // const comment = await comments.find({ userId });
   res.json({ list: Posts /*, comment*/ });
 });

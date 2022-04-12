@@ -58,11 +58,13 @@ router.post("/login", async (req, res) => {
 });
 
 // 정보 조회
-router.get("/users/me", authMiddleware, async (req, res) => {
+router.get("/checkLogin", authMiddleware, async (req, res) => {
   const { user } = res.locals;
   res.send({
     userId: user[0].userId,
+    userImageUrl: user[0].userImageUrl
   });
 });
+
 
 module.exports = router;
