@@ -51,7 +51,7 @@ router.post("/post", authmiddlewares, async (req, res) => {
 
   // const author = res.locals.user[0].userId;
 
-  const { category, title, imageUrl, content } = req.body;
+  const { category, title, imageUrl, content, image } = req.body;
   await Post.create({
     // postId: postId,
     category: category,
@@ -59,8 +59,9 @@ router.post("/post", authmiddlewares, async (req, res) => {
     imageUrl: imageUrl,
     content: content,
     date: date,
+    image: image
   });
-  res.json({});
+  res.json({ category, title, imageUrl, content, image });
 });
 
 // 게시글 삭제
