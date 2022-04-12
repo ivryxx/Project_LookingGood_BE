@@ -26,7 +26,30 @@
     <script>
       $(document).ready(function () {
         getPost();
+        // getSelf();
       });
+
+      // function getSelf(callback) {
+      //   $.ajax({
+      //     type: "GET",
+      //     url: "/api/checkLogin",
+      //     headers: { authorization: `Bearer ${localStorage.getItem("token")}` },
+      //     success: function (response) {
+      //       callback(response.user);
+      //     },
+      //     error: function (xhr, status, error) {
+      //       if (status == 401) {
+      //         alert("로그인이 필요합니다.");
+      //         console.log(token);
+      //       } else {
+      //         localStorage.clear();
+      //         alert("알 수 없는 문제가 발생했습니다. 관리자에게 문의하세요.");
+      //         console.log(token);
+      //       }
+      //       window.location.href = "/login";
+      //     },
+      //   });
+      // }
       //   getUser();
 
       //   // 로그아웃 상태에서 로그아웃 버튼 숨기기

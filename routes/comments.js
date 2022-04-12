@@ -4,22 +4,43 @@ const Comment = require("../schemas/comment");
 const authMiddleware = require("../middlewares/auth-middleware");
 
 // 댓글 저장
-router.post("/comment/save/:id", authMiddleware, async (req, res) => {
+router.post("/comments/save/:_Id", authMiddleware, async (req, res) => {
   const { user } = res.locals;
-  // console.log(user);
-  const { user_comment, createDate } = req.body;
-
+  console.log(user);
+  const { comment, createDate } = req.body;
+  console.log(comment, createDate)
   await Comment.create({
-    user_nick: user.user_nick,
-    user_comment,
+    userId: user.userId,
+    comment,
     createDate,
     postId: req.params.id,
   });
+  console.log(comment, createDate)
+
 
   res.json({
     success: "댓글이 저장 되었습니다.",
   });
 });
+// router.post("/comment/save/:_Id", async (req, res) => {
+//   const { id } = res.params;
+//   const { user } = res.locals;
+//   // console.log(user);
+//   const userId = user.userId;
+//   const commentId = user.commentId;
+//   const { comment, createDate } = req.body;
+//   await Comment.create({
+//     postId: Number(id),
+//     userId,
+//     createDate,
+//     commentId,
+//     comment,
+//     userImageUrl,
+//   });
+//   res.json({
+//     success: "댓글이 저장 되었습니다.",
+//   });
+// });
 
 //댓글 조회
 router.get("/comment/get/:id", authMiddleware, async (req, res) => {

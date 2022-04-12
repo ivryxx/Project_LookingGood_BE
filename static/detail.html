@@ -27,8 +27,8 @@
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
       const postId = urlParams.get("postId");
-      console.log(urlParams, postId);
       let userId;
+      console.log(urlParams, postId);
 
       $.ajax({
         type: "GET",
@@ -42,37 +42,37 @@
       });
 
       $(document).ready(function () {
-        getDetail();
+        // getDetail();
         // getComments();
       });
 
-      function getDetail() {
-        $.ajax({
-          type: "GET",
-          url: `/api/post/${postId}`,
-          success: function (response) {
-            const post = response.post;
+      // function getDetail() {
+      //   $.ajax({
+      //     type: "GET",
+      //     url: `/api/post/${postId}`,
+      //     success: function (response) {
+      //       const post = response.post;
 
-            // const category = post.category;
-            const title = post.title;
-            const imageUrl = post.imageUrl;
-            const content = post.content;
-            const date = post.date;
+      //       // const category = post.category;
+      //       const title = post.title;
+      //       const imageUrl = post.imageUrl;
+      //       const content = post.content;
+      //       const date = post.date;
 
-            // $("#category").text(category);
-            $("#title").text(title);
-            $("#imageUrl").text(imageUrl);
-            $("#content").text(content);
-            $("#date").text(date);
+      //       // $("#category").text(category);
+      //       $("#title").text(title);
+      //       $("#imageUrl").text(imageUrl);
+      //       $("#content").text(content);
+      //       $("#date").text(date);
 
-            // 작성자 아니면 수정 삭제 버튼 숨기기
-            // if (nickname !== $("#author").text()) {
-            //   $("#editButton").hide();
-            //   $("#deleteButton").hide();
-            // }
-          },
-        });
-      }
+      //       // 작성자 아니면 수정 삭제 버튼 숨기기
+      //       // if (nickname !== $("#author").text()) {
+      //       //   $("#editButton").hide();
+      //       //   $("#deleteButton").hide();
+      //       // }
+      //     },
+      //   });
+      // }
       // function posting() {
       //   const category = $("#category").val();
       //   const title = $("#title").val();
@@ -134,74 +134,72 @@
         });
       }
 
-      // function getComments() {
-      //   $("#comments").empty();
-      //   $.ajax({
-      //     type: "GET",
-      //     url: `/api/comments/${postId}`,
-      //     success: function (response) {
-      //       const comments = response.comments;
+      function getComments() {
+        $("#comments").empty();
+        $.ajax({
+          type: "GET",
+          url: `/api/comments/${postId}`,
+          success: function (response) {
+            const comments = response.comments;
+            console.log(response);
+            console.log(comments);
 
-      //       for (const comment of comments) {
-      //         const author = comment.author;
-      //         const content = comment.content;
-      //         const date = comment.date;
-      //         const commentId = comment._id;
-      //         const commentEditButtonId = commentId + "_EditButton";
-      //         const commentContentInputId = commentId + "_ContentInput";
-      //         const commentContentId = commentId + "_Content";
-      //         const commentEditConfirmId = commentId + "_EditConfirm";
-      //         let temp_html;
-      //         if (author === nickname) {
-      //           temp_html = `<tr id="${commentId}">
-      //                                       <td>${author}</td>
-      //                                       <td><input/ style="width: -webkit-fill-available;" id="${commentContentInputId}"><span id="${commentContentId}">${content}</span></td>
-      //                                       <td><span class="float-end">${date}</span></td>
-      //                                       <td>
-      //                                           <div class="float-end">
-      //                                           <button type="button" class="btn btn-light" id="${commentEditButtonId}" onclick="editComment('${commentId}')">수정</button>
-      //                                           <button type="button" class="btn btn-light" id="${commentEditConfirmId}" onclick="editCommentConfirm('${commentId}')">확인</button>
-      //                                           <button type="button" class="btn btn-light" onclick="deleteComment('${commentId}')">삭제</button>
-      //                                           </div>
-      //                                       </td>
-      //                                   </tr>`;
-      //         } else {
-      //           temp_html = `<tr id="${commentId}">
-      //                                       <td>${author}</td>
-      //                                       <td>${content}</td>
-      //                                       <td><span class="float-end">${date}</span></td>
-      //                                       <td></td>
-      //                                   </tr>`;
-      //         }
+            for (const comment of comments) {
+              const userId = comment.userId;
+              const commentId = comment._id;
+              const content = comment.content;
+              const date = comment.date;
+              const commentContentId = commentId + "_Content";
 
-      //         $("#comments").append(temp_html);
-      //         $(`#${commentContentInputId}`).hide();
-      //         $(`#${commentEditConfirmId}`).hide();
-      //       }
-      //     },
-      //   });
-      // }
+              let temp_html;
+              if (userId === userId) {
+                temp_html = `<tr id="${commentId}">
+                                            <td>${author}</td>
+                                            <td><input/ style="width: -webkit-fill-available;" id="${commentContentInputId}"><span id="${commentContentId}">${content}</span></td>
+                                            <td><span class="float-end">${date}</span></td>
+                                            <td>
+                                                <div class="float-end">
+                                                <button type="button" class="btn btn-light" onclick="deleteComment('${commentId}')">삭제</button>
+                                                </div>
+                                            </td>
+                                        </tr>`;
+              } else {
+                temp_html = `<tr id="${commentId}">
+                                            <td>${author}</td>
+                                            <td>${content}</td>
+                                            <td><span class="float-end">${date}</span></td>
+                                            <td></td>
+                                        </tr>`;
+              }
 
-      // function postComment() {
-      //   const content = $("#comment_content").val();
-      //   $.ajax({
-      //     type: "POST",
-      //     url: "/api/comments",
-      //     data: { content, postId },
-      //     headers: {
-      //       authorization: `Bearer ${localStorage.getItem("token")}`,
-      //     },
-      //     success: function (response) {
-      //       // alert(response.message)
-      //       getComments();
-      //       $("#comment_content").val("");
-      //     },
-      //     error: function (xhr) {
-      //       const err = eval("(" + xhr.responseText + ")");
-      //       alert(err.errorMessage);
-      //     },
-      //   });
-      // }
+              $("#comments").append(temp_html);
+              $(`#${commentContentInputId}`).hide();
+              $(`#${commentEditConfirmId}`).hide();
+            }
+          },
+        });
+      }
+
+      function postComment() {
+        const comment = $("#comment_content").val();
+        $.ajax({
+          type: "POST",
+          url: "/api/comments/save/:_Id",
+          data: { comment, postId },
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          success: function (response) {
+            alert(response.message);
+            getComments();
+            $("#comment_content").val();
+          },
+          error: function (xhr) {
+            const err = eval("(" + xhr.responseText + ")");
+            alert(err.errorMessage);
+          },
+        });
+      }
 
       // function deleteComment(commentId) {
       //   const result = confirm("정말로 삭제하시겠습니까?");
