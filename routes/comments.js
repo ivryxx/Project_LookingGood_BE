@@ -32,25 +32,25 @@ router.post("/comment/:id", async (req, res) => {
   });
 });
 
-//댓글 조회
-router.get("/comment/:id", async (req, res) => {
-  const { id } = req.params;
+// //댓글 조회
+// router.get("/comment/:id", async (req, res) => {
+//   const { id } = req.params;
 
-  const comment_list = await Comment.find({ articleId: id })
-    .populate("articleId", "_id")
-    .exec();
-  // console.log(comment_list);
+//   const comment_list = await Comment.find({ userId: id })
+//     .populate("usereId", "_id")
+//     .exec();
+//   // console.log(comment_list);
 
-  if (!comment_list.length) {
-    res.send({
-      alert: "댓글이 없습니다.",
-    });
-    return;
-  }
-  res.json({
-    comment_list: comment_list,
-  });
-});
+//   if (!comment_list.length) {
+//     res.send({
+//       alert: "댓글이 없습니다.",
+//     });
+//     return;
+//   }
+//   res.json({
+//     comment_list: comment_list,
+//   });
+// });
 
 module.exports = router;
 

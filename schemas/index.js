@@ -6,7 +6,7 @@ console.log(DB)
 const connect = () => {
   mongoose
     .connect(
-      'mongodb+srv://lookingGood:1234qwer@cluster0.cpnlv.mongodb.net/',
+      DB,
       {}
     )
     .catch((err) => console.log(err));

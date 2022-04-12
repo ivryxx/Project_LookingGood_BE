@@ -5,6 +5,43 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+
+    <script>
+
+       // 댓글 작성
+    function writeComment() {
+        const comment = $('#comment').val()
+        const commentId = $('#commentId').val()
+        const userId = $('#userId').val()
+        const userImageUrl = $('#userImageUrl').val()
+        const createDate = $('#createDate').val()
+        console.log(comment)
+    
+
+        if (!comment) {
+            alert("댓글 내용을 입력 해주세요.")
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/api/comment",
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            data: {comment, commentId, userId, userImageUrl, createDate},
+            success: function (response) { //새로고침
+                location.href = location.href
+                // history.go(0);
+            },
+            error: function (error) {
+                alert(error.responseJSON.errorMessage)
+            },
+        });
+    }
+
+
+    
+    </script>
   </head>
   <body>
     <h1>detail</h1>
