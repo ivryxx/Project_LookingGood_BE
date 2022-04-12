@@ -15,7 +15,7 @@ s3.getObject({ Bucket: "lookinggood", Key: "1649765198988" }, (err,data)=>{
   require("fs").writeFileSync("./result.png", data.Body.toString("base64"), {encoding: "base64"})
 
 });
-let upload = multer({
+const upload = multer({
   storage: multerS3({
     s3: s3,
     bucket: "lookinggood",

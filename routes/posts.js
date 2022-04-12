@@ -1,5 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const aws = require("aws-sdk");
+const multer = require("multer");
+const multerS3 = require("multer-s3");
 const router = express.Router();
 const authmiddlewares = require("../middlewares/auth-middleware");
 const Post = require("../schemas/post");
@@ -22,7 +25,32 @@ router.use(bodyParser.json());
 
 // 게시글 작성 //
 
-router.post("/post", authmiddlewares, async (req, res) => {
+let s3 = new aws.S3({
+  accessKeyId: "AKIASZONATOAZMARYUSU",
+  secretAccessKey: "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",
+});
+
+s3.getObject({ Bucket: "lookinggood", Key: "1649765198988" }, (err, data) => {
+  if (err) console.error(err);
+  console.log(data);
+  require("fs").writeFileSync("./result.png", data.Body.toString("base64"), {
+    encoding: "base64",
+  });
+});
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: "lookinggood",
+    // acl: "public-read",
+    metadata: function (req, file, cb) {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key: function (req, file, cb) {
+      cb(null, Date.now().toString());
+    },
+  }),
+});
+router.post("/post", upload.single("image"), authmiddlewares, async (req, res) => {
   const today = new Date();
   const year = today.getFullYear();
   let month = today.getMonth() + 1;
@@ -40,28 +68,17 @@ router.post("/post", authmiddlewares, async (req, res) => {
   const date =
     year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
 
-  // const maxNumber = await posts.findOne().sort("-postsNum");
-  // let postsNum = 1;
-  // if (maxNumber) {
-  //   postsNum = maxNumber.postsNum + 1;
-  // }
-  // const maxNumber = await Article.findOne().sort("-articleNum");
-  // let articleNum = 1;
-  //  if (maxNumber) { articleNum = maxNumber.articleNum + 1; }
-
-  // const author = res.locals.user[0].userId;
-
-  const { category, title, imageUrl, content, image } = req.body;
+  const { category, title, content } = req.body;
+  const image = req.file.location;
+  console.log(category, title, content,)
   await Post.create({
-    // postId: postId,
     category: category,
     title: title,
-    imageUrl: imageUrl,
     content: content,
     date: date,
     image: image
   });
-  res.json({ category, title, imageUrl, content, image });
+  res.json({ category, title, content, image });
 });
 
 // 게시글 삭제
