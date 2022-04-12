@@ -7,49 +7,32 @@ const authMiddleware = require("../middlewares/auth-middleware");
 router.post("/comments/save/:_Id", authMiddleware, async (req, res) => {
   const { user } = res.locals;
   console.log(user);
-  const { comment, createDate } = req.body;
-  console.log(comment, createDate)
+  const { comment, createAt, userImageUrl } = req.body;
   await Comment.create({
     userId: user.userId,
     comment,
-    createDate,
+    createAt,
+    conmmentId,
+    userImageUrl: user.userImageUrl,
     postId: req.params.id,
   });
-  console.log(comment, createDate)
+  console.log(comment, createAt, userImageUrl)
 
 
   res.json({
     success: "댓글이 저장 되었습니다.",
   });
 });
-// router.post("/comment/save/:_Id", async (req, res) => {
-//   const { id } = res.params;
-//   const { user } = res.locals;
-//   // console.log(user);
-//   const userId = user.userId;
-//   const commentId = user.commentId;
-//   const { comment, createDate } = req.body;
-//   await Comment.create({
-//     postId: Number(id),
-//     userId,
-//     createDate,
-//     commentId,
-//     comment,
-//     userImageUrl,
-//   });
-//   res.json({
-//     success: "댓글이 저장 되었습니다.",
-//   });
-// });
+
+
 
 //댓글 조회
-router.get("/comment/get/:id", authMiddleware, async (req, res) => {
+router.get("/comments/get/:_Id", authMiddleware, async (req, res) => {
   const { id } = req.params;
-
-  const comment_list = await Comment.find({ articleId: id })
-    .populate("articleId", "_id")
+  console.log(id)
+  const comment_list = await Comment.find({ postId: id })
     .exec();
-  // console.log(comment_list);
+  console.log(comment_list);
 
   if (!comment_list.length) {
     res.send({
@@ -62,4 +45,15 @@ router.get("/comment/get/:id", authMiddleware, async (req, res) => {
   });
 });
 
+
+//댓글 삭제
+
+router.delete("/comments/delete/:_Id", authMiddleware, async (req, res) => {
+  const { commentId } = req.params;
+  await Comment.deleteOne({ commentId });
+  res.send({ result: '삭제완료' });
+})
+
 module.exports = router;
+
+

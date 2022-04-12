@@ -10,11 +10,9 @@ const commentsSchema = new Schema({
     // required: true,
   },
   commentId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Post'
     // required: true,
-  },
-  postId: {
-    type: String,
   },
   comment: {
     type: String,
@@ -22,6 +20,9 @@ const commentsSchema = new Schema({
   userImageUrl: {
     type: String,
   },
+  createAt: {
+    type: String,
+  }
 });
 
 module.exports = mongoose.model("comments", commentsSchema);

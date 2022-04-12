@@ -65,40 +65,16 @@ router.post("/post", authmiddlewares, async (req, res) => {
 
 // 게시글 삭제
 
-router.delete("/post/:_Id", authmiddlewares, async (req, res) => {
-  await Post.deleteOne({ _Id: req.params.postsId })
-  console.log(_Id)
+router.delete("/post/delete/:_Id", authmiddlewares, async (req, res) => {
+  await Post.deleteOne({ _id: req.params.postId })
+
   res.json({ success: "삭제 성공" });
 });
 
-// router.delete("/:_id", async (req, res) => {
-//   try {
-//     const _id = req.params._id;
-//     // const password = req.body["password"];
-//     const isExist = await Post.findOne({ _id });
-//     if (!isExist || !_id) {
-//       console.log(
-//         `${req.method} ${req.originalUrl} : 일치하지 않는 비밀번호 입니다.`
-//       );
-//       res.status(406).send();
-//       return;
-//     }
-//     await Post.deleteOne({ _id });
-//     res.send({ result: "게시글을 삭제하였습니다." });
-//   } catch (error) {
-//     console.log(`${req.method} ${req.originalUrl} : ${error.message}`);
-//     res.status(400).send();
-//   }
-// });
-
-// router.delete("/post/delete/:postId", async (req, res) => {
-//   await Post.deleteOne({ _id: req.params.userId });
-//   res.json({ message: "삭제가 완료됐습니다." });
-// });
 
 // 게시글 수정
 
-router.put("/post/modify/:_Id", authmiddlewares, async (req, res) => {
+router.put("/post/put/:_Id", authmiddlewares, async (req, res) => {
   const today = new Date();
   const year = today.getFullYear();
   let month = today.getMonth() + 1;
