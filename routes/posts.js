@@ -128,7 +128,7 @@ router.put("/post/put/:postId", upload.single('imageUrl'), authmiddlewares, asyn
       content,
       date
     }}
-  res.json({ success: "수정이 완료됐습니다." });
+  res.json({ success: "수정이 완료됐습니다.!!!!!1!!!!!!!!" });
 });
 
 // 전체 게시글 조회 //
