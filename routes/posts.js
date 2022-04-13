@@ -99,38 +99,45 @@ router.delete('/post/delete/:postId', authmiddlewares, async (req, res) => { //�
 
 // 게시글 수정
 
-router.put("/post/put/:_Id", authmiddlewares, async (req, res) => {
-  const today = new Date();
-  const year = today.getFullYear();
-  let month = today.getMonth() + 1;
-  let day = today.getDate();
-  let hour = today.getHours();
-  let minutes = today.getMinutes();
-  let seconds = today.getSeconds();
-
-  month = month < 10 ? "0" + month : month;
-  day = day < 10 ? "0" + day : day;
-  hour = hour < 10 ? "0" + hour : hour;
-  seconds = seconds < 10 ? "0" + seconds : seconds;
-  minutes = minutes < 10 ? "0" + minutes : minutes;
-
-  const date =
-    year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
-
-  const { title, imageUrl, content } = req.body;
-  await Post.findByIdAndUpdate(req.params._Id, {
+router.put("/post/put/:postId", upload.single('imageUrl'), authmiddlewares, async (req, res) => {
+  const { postId } = req.params
+  const { category, title, content } = req.body;
+  const imageUrl = req.file.location;
+  const post = Post.findOne({ _id: postId });
+  if (!post) {
+    return res.status(400).send({ errorMessage: "본인의 글이 아닙니다." })
+  }
+  await Post.updateOne({ _id: postId }, {
     $set: {
       // postId: postId,
-      // category: category,
-      title: title,
       // userId: userId,
-      imageUrl: imageUrl,
-      content: content,
-      date: date
+      category,
+      title,
+      imageUrl,
+      content,
+      // date: date
     },
-  }).exec();
-  res.json({ message: "수정이 완료됐습니다." });
+  })
+  res.json({ success: true, message: "수정이 완료됐습니다." });
 });
+
+// const { postId } = req.params;
+//   const { category, title, content } = req.body;
+//   const imageUrl = req.file.location;
+//   await Post.findByIdAndUpdate({ _id: postId }),
+//     {
+//       $set: {
+//         category,
+//         title,
+//         imageUrl,
+//         content,
+//         date
+//       },
+//     };
+//   res.json({ success: "수정이 완료됐습니다!!!!!!" });
+// });
+
+
 
 // 전체 게시글 조회 //
 
