@@ -81,15 +81,12 @@ router.post("/post", authmiddlewares, upload.single('imageUrl'), async (req, res
   res.json({ userId, userImageUrl, category, title, imageUrl, content });
 });
 
-// 게시글 삭제
-
-// router.delete("/post/delete/:postId", authmiddlewares, async (req, res) => {
-//   await Post.deleteOne({ _id: req.params.postId })
-//   console.log(req.params)
-//   res.json({ success: "삭제 성공" });
-// });
 
 
+
+
+
+//게시글 삭제
 router.delete('/post/delete/:postId', authmiddlewares, async (req, res) => { //게시글 삭제
   const { postId } = req.params;
   console.log(req.params)
@@ -121,34 +118,46 @@ router.put("/post/put/:postId", upload.single('imageUrl'), authmiddlewares, asyn
   res.json({ success: true, message: "수정이 완료됐습니다." });
 });
 
-// const { postId } = req.params;
-//   const { category, title, content } = req.body;
-//   const imageUrl = req.file.location;
-//   await Post.findByIdAndUpdate({ _id: postId }),
-//     {
-//       $set: {
-//         category,
-//         title,
-//         imageUrl,
-//         content,
-//         date
-//       },
-//     };
-//   res.json({ success: "수정이 완료됐습니다!!!!!!" });
+
+
+// router.get('/post/get/:postId', authmiddlewares, async (req, res) => {
+//   const { postId } = req.params;
+//   console.log(postId)
+//   const { user } = res.locals;
+//   console.log(res.locals)
+//   const userId = user[0].userId;
+//   const userImageUrl = user[0].userImageUrl;
+
+//   await Post.findOne({ _id: postId });
+//   res.json({ userId, userImageUrl, category, title, imageUrl, content });
+// });
+
+// router.get("/post/get/:postId", authmiddlewares, async (req, res) => {
+//   const Posts = await Post.findOne({ _id: postId });
+//   console.log(Posts)
+
+//   res.json({ list: Posts });
 // });
 
 
 
 // 전체 게시글 조회 //
-
 router.get("/post", async (req, res) => {
   const Posts = await Post.find();
   res.json({ list: Posts });
 });
 
+
+// router.get("/post", async (req, res) => {
+//   const Posts = await Post.find();
+//   const a = Posts.find(a => a._id === req.params)
+//   console.log(a, req.params)
+//   res.json({ list: Posts });
+// });
+
+
+
 // 상세 페이지 접속
-
-
 router.get('/post/:postId', async function (req, res) {
   const { postId } = req.params;
   Post.findById(postId, async function (err, post) {
@@ -165,7 +174,7 @@ router.get('/post/:postId', async function (req, res) {
 });
 
 
-router.get('/post/')
+
 
 // router.get("/post/:postId", async (req, res) => {
 //   console.log(req.params)
