@@ -6,13 +6,18 @@ const postSchema = new mongoose.Schema({
   //   unique: true, //유니크 값
   //   required: true, //필수 값
   // },
-  title: {
-    //게시글 제목
-    type: String,
-  },
   userId: {
     //사용자 이름
     type: String,
+  },
+  userImageUrl: {
+    //사용자 프로필사진
+    type: String,
+  },
+  title: {
+    //게시글 제목
+    type: String,
+    required: true,
   },
   content: {
     //게시글 내용

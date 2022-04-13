@@ -58,22 +58,27 @@ router.post("/post", authmiddlewares, upload.single('imageUrl'), async (req, res
   seconds = seconds < 10 ? "0" + seconds : seconds;
   minutes = minutes < 10 ? "0" + minutes : minutes;
 
-  const date =
+  const createAt =
     year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
 
+  const { user } = res.locals;
+  const userId = user[0].userId;
+  const userImageUrl = user[0].userImageUrl;
   const imageUrl = req.file.location
   const { category, title, content } = req.body;
-  // let { user } = res.locals;
+  console.log(userId)
 
   await Post.create({
     // postId: postId,
+    userId,
+    userImageUrl,
     category: category,
     title: title,
     imageUrl,
     content: content,
-    date: date,
+    createAt: createAt,
   });
-  res.json({ category, title, imageUrl, content });
+  res.json({ userId, userImageUrl, category, title, imageUrl, content });
 });
 
 // 게시글 삭제
