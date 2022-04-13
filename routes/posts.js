@@ -97,7 +97,8 @@ router.delete('/post/delete/:postId', authmiddlewares, async (req, res) => { //�
 
 // 게시글 수정
 
-router.put("/post/put/:_Id", upload.single('imageUrl'), authmiddlewares, async (req, res) => {
+router.put("/post/put/:postId", upload.single('imageUrl'), authmiddlewares, async (req, res) => {
+  const { postId } = req.params;
   const today = new Date();
   const year = today.getFullYear();
   let month = today.getMonth() + 1;
@@ -117,18 +118,17 @@ router.put("/post/put/:_Id", upload.single('imageUrl'), authmiddlewares, async (
 
   const { category, title, content } = req.body;
   const imageUrl = req.file.location;
-  await Post.findByIdAndUpdate(req.params._Id, {
+  await Post.findByIdAndUpdate({ _id: postId }), {
     $set: {
       // postId: postId,
-      category: category,
-      title: title,
+      category,
+      title,
       // userId: userId,
-      imageUrl: imageUrl,
-      content: content,
-      date: date
-    },
-  }).exec();
-  res.json({ message: "수정이 완료됐습니다." });
+      imageUrl,
+      content,
+      date
+    }}
+  res.json({ success: "수정이 완료됐습니다." });
 });
 
 // 전체 게시글 조회 //
