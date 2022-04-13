@@ -69,9 +69,9 @@ router.post("/post", authmiddlewares, async (req, res) => {
 
 // 게시글 삭제
 
-router.delete("/post/:_Id", authmiddlewares, async (req, res) => {
-  await Post.deleteOne({ _Id: req.params.postsId })
-  console.log(_Id)
+router.delete("/post/delete/:postId", authmiddlewares, async (req, res) => {
+  await Post.deleteOne({ _id: req.params.postsId })
+  // console.log(_id)
   res.json({ success: "삭제 성공" });
 });
 
