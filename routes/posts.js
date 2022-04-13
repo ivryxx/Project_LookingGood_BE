@@ -116,16 +116,16 @@ router.put("/post/put/:_Id", authmiddlewares, async (req, res) => {
   const date =
     year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
 
-  const { title, imageUrl, content } = req.body;
+  const {postId} =req.params
+  const { title, imageUrl, content, category } = req.body;
   await Post.findByIdAndUpdate(req.params._Id, {
     $set: {
       // postId: postId,
-      // category: category,
-      title: title,
-      // userId: userId,
-      imageUrl: imageUrl,
-      content: content,
-      date: date
+      category,
+      title,
+      imageUrl,
+      content,
+      // date: date
     },
   }).exec();
   res.json({ message: "수정이 완료됐습니다." });
