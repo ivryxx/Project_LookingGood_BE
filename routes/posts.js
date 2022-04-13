@@ -81,7 +81,17 @@ router.post("/post", authmiddlewares, upload.single('imageUrl'), async (req, res
 
 // 게시글 삭제
 
-router.delete("/post/delete/:_Id", authmiddlewares, async (req, res) => {
+// router.delete("/post/delete/:postId", authmiddlewares, async (req, res) => {
+//   // const { post_id } = req.params;
+//   // console.log(post_id);
+//   // const { userId } = res.locals;
+
+//   await Post.deleteOne({ _id: req.params.postId });
+
+//   res.json({ success: "삭제가 완료되었습니다!" });
+// });
+
+router.delete("/post/delete/:postId", authmiddlewares, async (req, res) => {
   await Post.deleteOne({ _id: req.params.postId })
 
   res.json({ success: "삭제 성공" });
@@ -90,7 +100,7 @@ router.delete("/post/delete/:_Id", authmiddlewares, async (req, res) => {
 
 // 게시글 수정
 
-router.put("/post/put/:_Id", authmiddlewares, async (req, res) => {
+router.put("/post/put/:_Id", upload.single('imageUrl'), authmiddlewares, async (req, res) => {
   const today = new Date();
   const year = today.getFullYear();
   let month = today.getMonth() + 1;
@@ -108,11 +118,12 @@ router.put("/post/put/:_Id", authmiddlewares, async (req, res) => {
   const date =
     year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
 
-  const { title, imageUrl, content } = req.body;
+  const { category, title, content } = req.body;
+  const imageUrl = req.file.location;
   await Post.findByIdAndUpdate(req.params._Id, {
     $set: {
       // postId: postId,
-      // category: category,
+      category: category,
       title: title,
       // userId: userId,
       imageUrl: imageUrl,
