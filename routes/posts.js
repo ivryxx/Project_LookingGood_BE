@@ -6,7 +6,7 @@ const multerS3 = require("multer-s3");
 const router = express.Router();
 const authmiddlewares = require("../middlewares/auth-middleware");
 const Post = require("../schemas/post");
-// const UserController = require("../controllesrs/userController");
+const Comment = require("../schemas/comment")
 const upload = require('../modules/multer');
 const req = require("express/lib/request");
 const res = require("express/lib/response");
@@ -82,21 +82,18 @@ router.post("/post", authmiddlewares, upload.single('imageUrl'), async (req, res
 // 게시글 삭제
 
 // router.delete("/post/delete/:postId", authmiddlewares, async (req, res) => {
-//   // const { post_id } = req.params;
-//   // console.log(post_id);
-//   // const { userId } = res.locals;
-
-//   await Post.deleteOne({ _id: req.params.postId });
-
-//   res.json({ success: "삭제가 완료되었습니다!" });
+//   await Post.deleteOne({ _id: req.params.postId })
+//   console.log(req.params)
+//   res.json({ success: "삭제 성공" });
 // });
 
-router.delete("/post/delete/:postId", authmiddlewares, async (req, res) => {
-  await Post.deleteOne({ _id: req.params.postId })
 
-  res.json({ success: "삭제 성공" });
+router.delete('/post/delete/:postId', authmiddlewares, async (req, res) => { //게시글 삭제
+  const { postId } = req.params;
+  console.log(req.params)
+  await Post.deleteOne({ _id: postId });
+  res.json({ success: "삭제가 완료 되었습니다" });
 });
-
 
 // 게시글 수정
 
@@ -143,11 +140,32 @@ router.get("/post", async (req, res) => {
 
 // 상세 페이지 접속
 
-router.get("/post/:postId", async (req, res) => {
-  console.log(req.params)
-  const Posts = await Post.findById(req.params.postId);
-  // const comment = await comments.find({ userId });
-  res.json({ list: Posts /*, comment*/ });
+
+router.get('/post/:postId', async function (req, res) {
+  const { postId } = req.params;
+  Post.findById(postId, async function (err, post) {
+    if (!err) {
+      let comments = await Comment.find({ postId: postId });
+      comments.sort(function (a, b) {
+        return b.updatedAt - a.updatedAt;
+      });
+      res.json({ ok: true, post, comments });
+    } else {
+      res.json({ ok: false, post: {}, comments: {} });
+    }
+  });
 });
+
+
+router.get('/post/')
+
+// router.get("/post/:postId", async (req, res) => {
+//   console.log(req.params)
+//   const Posts = await Post.findById(req.params.postId);
+//   const comment = await Post.findById(req.params.commentId)
+//   // const comment = await comments.find({ userId });
+//   res.json({ list: Posts, comment });
+//   console.log(s)
+// });
 
 module.exports = router;

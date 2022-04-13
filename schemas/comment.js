@@ -10,12 +10,15 @@ const commentsSchema = new Schema({
     // required: true,
   },
   commentId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Post'
+    type: String,
     // required: true,
+  },
+  postId: {
+    type: String,
   },
   comment: {
     type: String,
+    // required:true
   },
   userImageUrl: {
     type: String,
