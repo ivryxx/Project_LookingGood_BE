@@ -23,22 +23,41 @@ router.post("/comments/save/:postId", authMiddleware, async (req, res) => {
   try {
     const { user } = res.locals;
 
+    const today = new Date();
+    const year = today.getFullYear();
+    let month = today.getMonth() + 1;
+    let day = today.getDate();
+    let hour = today.getHours();
+    let minutes = today.getMinutes();
+    let seconds = today.getSeconds();
+
+    month = month < 10 ? "0" + month : month;
+    day = day < 10 ? "0" + day : day;
+    hour = hour < 10 ? "0" + hour : hour;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+
+    const createAt =
+      year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
+
     const userId = user[0].userId;
     const userImageUrl = user[0].userImageUrl;
-    const { comment, createAt } = req.body;
+    const { comment } = req.body;
     const { postId } = req.params
     console.log(userId, comment, createAt, postId);
-    await Comment.create({
+    const list = await Comment.create({
       // userId:user.userId,
       userId,
       userImageUrl,
       comment,
-      createAt,
-      // commentId,
+      createAt: createAt,
       postId
+      // commentId,
     });
+    console.log(list)
     res.json({
       success: "댓글이 저장 되었습니다.",
+      list
     });
   } catch (err) {
     console.log(err)
@@ -49,27 +68,6 @@ router.post("/comments/save/:postId", authMiddleware, async (req, res) => {
 });
 
 
-// router.post("/comments/save/:postId", authMiddleware, async (req, res) => {
-//   const { user } = res.locals;
-//   console.log(user);
-//   const { comment, createAt, userImageUrl } = req.body;
-//   await Comment.create({
-//     userId: user.userId,
-//     comment,
-//     createAt,
-//     conmmentId,
-//     userImageUrl: user.userImageUrl,
-//     postId: req.params.id,
-//   });
-//   console.log(comment, createAt, userImageUrl)
-
-
-//   res.json({
-//     comment_list: comment_list,
-//   });
-// });
-
-
 
 //댓글 조회
 
@@ -78,7 +76,7 @@ router.get('/comments/get/:postId', async (req, res) => {
     const { postId } = req.params;
     let comments = await Comment.find({ postId });
     console.log(postId)
-    res.json({ comments });
+    res.json(comments);
   } catch (err) {
     console.error(err);
   }
@@ -109,3 +107,27 @@ router.delete("/comments/delete/:commentId", authMiddleware, async (req, res) =>
 
 module.exports = router;
 
+
+
+
+
+
+// router.post("/comments/save/:postId", authMiddleware, async (req, res) => {
+//   const { user } = res.locals;
+//   console.log(user);
+//   const { comment, createAt, userImageUrl } = req.body;
+//   await Comment.create({
+//     userId: user.userId,
+//     comment,
+//     createAt,
+//     conmmentId,
+//     userImageUrl: user.userImageUrl,
+//     postId: req.params.id,
+//   });
+//   console.log(comment, createAt, userImageUrl)
+
+
+//   res.json({
+//     success: "댓글이 저장 되었습니다.",
+//   });
+// });
