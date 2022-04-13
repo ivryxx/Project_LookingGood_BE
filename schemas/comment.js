@@ -18,6 +18,7 @@ const commentsSchema = new Schema({
   },
   comment: {
     type: String,
+    // required:true
   },
   userImageUrl: {
     type: String,

@@ -4,11 +4,9 @@ const router = express.Router();
 const authmiddlewares = require("../middlewares/auth-middleware");
 const Post = require("../schemas/post");
 const Comment = require("../schemas/comment")
-// const UserController = require("../controllesrs/userController");
 const upload = require('../modules/multer');
 const req = require("express/lib/request");
 const res = require("express/lib/response");
-// const comment = require("../schemas/comment");
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -153,6 +151,9 @@ router.get('/post/:postId', async function (req, res) {
     }
   });
 });
+
+
+router.get('/post/')
 
 // router.get("/post/:postId", async (req, res) => {
 //   console.log(req.params)

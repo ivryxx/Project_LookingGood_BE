@@ -12,6 +12,7 @@ router.post("/comments/save/:postId", authMiddleware, async (req, res) => {
   try {
     const { user } = res.locals;
 
+
     const userId = user[0].userId;
     const userImageUrl = user[0].userImageUrl;
     const { comment, createAt } = req.body;
@@ -23,8 +24,8 @@ router.post("/comments/save/:postId", authMiddleware, async (req, res) => {
       userImageUrl,
       comment,
       createAt,
-      // commentId,
       postId
+      // commentId,
     });
     res.json({
       success: "댓글이 저장 되었습니다.",
