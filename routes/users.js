@@ -61,7 +61,8 @@ router.post("/login", async (req, res) => {
 router.get("/checkLogin", authMiddleware, async (req, res) => {
   const { user } = res.locals;
   res.send({
-    userId: user.userId,
+    userId: user[0].userId,
+    userImageUrl: user[0].userImageUrl
   });
 });
 

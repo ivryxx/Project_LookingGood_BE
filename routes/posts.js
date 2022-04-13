@@ -3,8 +3,10 @@ const bodyParser = require("body-parser");
 const router = express.Router();
 const authmiddlewares = require("../middlewares/auth-middleware");
 const Post = require("../schemas/post");
-// const UserController = require("../controllers/userController");
-// const upload = require('../modules/multer');
+const Comment = require("../schemas/comment")
+const upload = require('../modules/multer');
+const req = require("express/lib/request");
+const res = require("express/lib/response");
 
 
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -16,17 +18,36 @@ router.use(bodyParser.json());
 // 이미지 파일 AWS S3 저장
 
 // router.post(
-//   "/imgs",
-//   upload.single("image"),
-//   UserController.uploadImage,
-//   (req, res) => {
-//     res.send({});
-//   }
-// );
+//   "/single",
+//   upload.single("imageUrl"), async (req, res) => {
+//     const file = await req.file;
+//     console.log(file)
+//     try {
+//       const result = await file.location;
+//       res.status(200).json({ imageUrl: result })
+//     } catch (e) {
+//       console.log(e)
+//     }
+
+//   });
+
+// UserController.uploadImage,
+
+router.post('/single', upload.single('imageUrl'), async (req, res) => {
+  const file = await req.file;
+  console.log(file);
+  try {
+    const result = await file.location;
+    console.log(result)
+    res.status(200).json({ imageUrl: result })
+  } catch (e) {
+
+  }
+});
 
 // 게시글 작성 //
 
-router.post("/post", authmiddlewares, async (req, res) => {
+router.post("/post", authmiddlewares, upload.single('imageUrl'), async (req, res) => {
   const today = new Date();
   const year = today.getFullYear();
   let month = today.getMonth() + 1;
@@ -44,65 +65,40 @@ router.post("/post", authmiddlewares, async (req, res) => {
   const date =
     year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
 
-  // const maxNumber = await posts.findOne().sort("-postsNum");
-  // let postsNum = 1;
-  // if (maxNumber) {
-  //   postsNum = maxNumber.postsNum + 1;
-  // }
-  // const maxNumber = await Article.findOne().sort("-articleNum");
-  // let articleNum = 1;
-  //  if (maxNumber) { articleNum = maxNumber.articleNum + 1; }
+  const imageUrl = req.file.location
+  const { category, title, content } = req.body;
+  // let { user } = res.locals;
 
-  // const author = res.locals.user[0].userId;
-
-  const { category, title, imageUrl, content } = req.body;
   await Post.create({
     // postId: postId,
     category: category,
     title: title,
-    imageUrl: imageUrl,
+    imageUrl,
     content: content,
     date: date,
   });
-  res.json({});
+  res.json({ category, title, imageUrl, content });
 });
 
 // 게시글 삭제
 
-router.delete("/post/delete/:postId", authmiddlewares, async (req, res) => {
-  await Post.deleteOne({ _id: req.params.postsId })
-  // console.log(_id)
-  res.json({ success: "삭제 성공" });
+// router.delete("/post/delete/:postId", authmiddlewares, async (req, res) => {
+//   await Post.deleteOne({ _id: req.params.postId })
+//   console.log(req.params)
+//   res.json({ success: "삭제 성공" });
+// });
+
+
+router.delete('/post/delete/:postId', authmiddlewares, async (req, res) => { //게시글 삭제
+  const { postId } = req.params;
+  console.log(req.params)
+  await Post.deleteOne({ _id: postId });
+  res.json({ success: "삭제가 완료 되었습니다" });
 });
-
-// router.delete("/:_id", async (req, res) => {
-//   try {
-//     const _id = req.params._id;
-//     // const password = req.body["password"];
-//     const isExist = await Post.findOne({ _id });
-//     if (!isExist || !_id) {
-//       console.log(
-//         `${req.method} ${req.originalUrl} : 일치하지 않는 비밀번호 입니다.`
-//       );
-//       res.status(406).send();
-//       return;
-//     }
-//     await Post.deleteOne({ _id });
-//     res.send({ result: "게시글을 삭제하였습니다." });
-//   } catch (error) {
-//     console.log(`${req.method} ${req.originalUrl} : ${error.message}`);
-//     res.status(400).send();
-//   }
-// });
-
-// router.delete("/post/delete/:postId", async (req, res) => {
-//   await Post.deleteOne({ _id: req.params.userId });
-//   res.json({ message: "삭제가 완료됐습니다." });
-// });
 
 // 게시글 수정
 
-router.put("/post/modify/:_Id", authmiddlewares, async (req, res) => {
+router.put("/post/put/:_Id", authmiddlewares, async (req, res) => {
   const today = new Date();
   const year = today.getFullYear();
   let month = today.getMonth() + 1;
@@ -120,16 +116,16 @@ router.put("/post/modify/:_Id", authmiddlewares, async (req, res) => {
   const date =
     year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
 
-  const { category, title, userId, imageUrl, content } = req.body;
+  const { title, imageUrl, content } = req.body;
   await Post.findByIdAndUpdate(req.params._Id, {
     $set: {
       // postId: postId,
-      category: category,
+      // category: category,
       title: title,
-      userId: userId,
+      // userId: userId,
       imageUrl: imageUrl,
       content: content,
-      date: date,
+      date: date
     },
   }).exec();
   res.json({ message: "수정이 완료됐습니다." });
@@ -144,10 +140,32 @@ router.get("/post", async (req, res) => {
 
 // 상세 페이지 접속
 
-router.get("/post/:_Id", async (req, res) => {
-  const Posts = await Post.findById(req.params._Id);
-  // const comment = await comments.find({ userId });
-  res.json({ list: Posts /*, comment*/ });
+
+router.get('/post/:postId', async function (req, res) {
+  const { postId } = req.params;
+  Post.findById(postId, async function (err, post) {
+    if (!err) {
+      let comments = await Comment.find({ postId: postId });
+      comments.sort(function (a, b) {
+        return b.updatedAt - a.updatedAt;
+      });
+      res.json({ ok: true, post, comments });
+    } else {
+      res.json({ ok: false, post: {}, comments: {} });
+    }
+  });
 });
+
+
+router.get('/post/')
+
+// router.get("/post/:postId", async (req, res) => {
+//   console.log(req.params)
+//   const Posts = await Post.findById(req.params.postId);
+//   const comment = await Post.findById(req.params.commentId)
+//   // const comment = await comments.find({ userId });
+//   res.json({ list: Posts, comment });
+//   console.log(s)
+// });
 
 module.exports = router;

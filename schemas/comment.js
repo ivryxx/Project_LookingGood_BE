@@ -18,6 +18,7 @@ const commentsSchema = new Schema({
   },
   comment: {
     type: String,
+    // required:true
   },
   userImageUrl: {
     type: String,
@@ -25,6 +26,6 @@ const commentsSchema = new Schema({
   createAt : {
     type: String
   }
-})
+});
 
 module.exports = mongoose.model('comments', commentsSchema)
