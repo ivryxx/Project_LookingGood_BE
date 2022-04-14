@@ -90,7 +90,8 @@ router.get('/comments/get/:postId', async (req, res) => {
 
 router.delete("/comments/delete/:commentId", authMiddleware, async (req, res) => {
   const { commentId } = req.params;
-  await Comment.deleteOne({ commentId });
+  await Comment.deleteOne({ _id: commentId });
+  console.log(commentId)
   res.send({ result: '삭제완료' });
 })
 
