@@ -11,24 +11,8 @@ const res = require("express/lib/response");
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
+
 // 이미지 파일 AWS S3 저장
-
-// router.post(
-//   "/single",
-//   upload.single("imageUrl"), async (req, res) => {
-//     const file = await req.file;
-//     console.log(file)
-//     try {
-//       const result = await file.location;
-//       res.status(200).json({ imageUrl: result })
-//     } catch (e) {
-//       console.log(e)
-//     }
-
-//   });
-
-// UserController.uploadImage,
-
 router.post('/single', upload.single('imageUrl'), async (req, res) => {
   const file = await req.file;
   console.log(file);
@@ -81,15 +65,9 @@ router.post("/post", authmiddlewares, upload.single('imageUrl'), async (req, res
   res.json({ userId, userImageUrl, category, title, imageUrl, content });
 });
 
+
+
 // 게시글 삭제
-
-// router.delete("/post/delete/:postId", authmiddlewares, async (req, res) => {
-//   await Post.deleteOne({ _id: req.params.postId })
-//   console.log(req.params)
-//   res.json({ success: "삭제 성공" });
-// });
-
-
 router.delete('/post/delete/:postId', authmiddlewares, async (req, res) => { //게시글 삭제
   const { postId } = req.params;
   console.log(req.params)
@@ -97,8 +75,9 @@ router.delete('/post/delete/:postId', authmiddlewares, async (req, res) => { //�
   res.json({ success: "삭제가 완료 되었습니다" });
 });
 
-// 게시글 수정
 
+
+// 게시글 수정
 router.put("/post/put/:postId", upload.single('imageUrl'), authmiddlewares, async (req, res) => {
   const { postId } = req.params
   const { category, title, content } = req.body;
@@ -121,39 +100,25 @@ router.put("/post/put/:postId", upload.single('imageUrl'), authmiddlewares, asyn
   res.json({ success: true, message: "수정이 완료됐습니다." });
 });
 
-// const { postId } = req.params;
-//   const { category, title, content } = req.body;
-//   const imageUrl = req.file.location;
-//   await Post.findByIdAndUpdate({ _id: postId }),
-//     {
-//       $set: {
-//         category,
-//         title,
-//         imageUrl,
-//         content,
-//         date
-//       },
-//     };
-//   res.json({ success: "수정이 완료됐습니다!!!!!!" });
-// });
+
 
 
 
 // 전체 게시글 조회 //
-
 router.get("/post", async (req, res) => {
   const Posts = await Post.find();
   res.json({ list: Posts });
 });
 
+
+
 // 상세 페이지 접속
-
-
-router.get('/post/:postId', async function (req, res) {
+router.get('/post/detail/:postId', async function (req, res) {
   const { postId } = req.params;
   Post.findById(postId, async function (err, post) {
     if (!err) {
-      let comments = await Comment.find({ postId: postId });
+      let comments = await Comment.find({ _id: postId });
+      console.log(comments)
       comments.sort(function (a, b) {
         return b.updatedAt - a.updatedAt;
       });
@@ -163,17 +128,5 @@ router.get('/post/:postId', async function (req, res) {
     }
   });
 });
-
-
-router.get('/post/')
-
-// router.get("/post/:postId", async (req, res) => {
-//   console.log(req.params)
-//   const Posts = await Post.findById(req.params.postId);
-//   const comment = await Post.findById(req.params.commentId)
-//   // const comment = await comments.find({ userId });
-//   res.json({ list: Posts, comment });
-//   console.log(s)
-// });
 
 module.exports = router;
