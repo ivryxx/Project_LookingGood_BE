@@ -117,7 +117,9 @@ router.get('/post/detail/:postId', async function (req, res) {
   const { postId } = req.params;
   Post.findById(postId, async function (err, post) {
     if (!err) {
-      let comments = await Comment.find({ _id: postId });
+      let comments = await Comment.find({ postId: postId });
+      // db.collection.findById('4ecbe7f9e8c1c9092c000027');
+      // col.find_one({ '_id': ObjectId('5f6d775c29be48f7e50ea68e') })
       console.log(comments)
       comments.sort(function (a, b) {
         return b.updatedAt - a.updatedAt;
