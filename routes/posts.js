@@ -74,7 +74,6 @@ router.post("/post", authmiddlewares, upload.single('imageUrl'), async (req, res
     imageUrl,
     content: content,
     date: date,
-    image: image
   });
   res.json({ category, title, imageUrl, content });
 });
@@ -98,7 +97,7 @@ router.delete('/post/delete/:postId', authmiddlewares, async (req, res) => { //�
 // 게시글 수정
 
 router.put("/post/put/:postId", upload.single('imageUrl'), authmiddlewares, async (req, res) => {
-  const { postId } = req.params;
+ 
   const today = new Date();
   const year = today.getFullYear();
   let month = today.getMonth() + 1;
@@ -115,21 +114,51 @@ router.put("/post/put/:postId", upload.single('imageUrl'), authmiddlewares, asyn
 
   const date =
     year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
-
+  
+  
+  const { postId } = req.params;
   const { category, title, content } = req.body;
   const imageUrl = req.file.location;
-  await Post.findByIdAndUpdate({ _id: postId }), {
-    $set: {
-      // postId: postId,
-      category,
-      title,
-      // userId: userId,
-      imageUrl,
-      content,
-      date
-    }}
-  res.json({ success: "수정이 완료됐습니다.!!!!!1!!!!!!!!" });
+  await Post.updateOne({ _id: postId }),
+    {
+      $set: {
+        category,
+        title,
+        imageUrl,
+        content,
+        date
+      },
+    };
+  res.json({ success: "수정이 완료됐습니다!!!!!!" });
 });
+
+
+// // 
+// router.get("/post/find/:postId", authmiddlewares, async (req, res) => {
+//   const { postId } = req.params;
+//   console.log(req.params);
+//   // await Post.findOneById({ _id: postId });
+//   const { user } = res.locals;
+//   const userId = user[0].userId;
+//   const userImageUrl = user[0].userImageUrl;
+//   const imageUrl = req.file.location
+//   const { category, title, content } = req.body;
+//   console.log(userId, userImageUrl, imageUrl, category, title, content)
+
+//   await Post.findById({ _id: postId });({
+//     // postId: postId,
+//     userId,
+//     userImageUrl,
+//     category: category,
+//     title: title,
+//     imageUrl,
+//     content: content,
+//     createAt: createAt,
+//   });
+//   res.json({ userId, userImageUrl, category, title, imageUrl, content });
+// });
+
+
 
 // 전체 게시글 조회 //
 
@@ -141,11 +170,11 @@ router.get("/post", async (req, res) => {
 // 상세 페이지 접속
 
 
-router.get('/post/:postId', async function (req, res) {
+router.get('/post/detail/:postId', async function (req, res) {
   const { postId } = req.params;
   Post.findById(postId, async function (err, post) {
     if (!err) {
-      let comments = await Comment.find({ postId: postId });
+      let comments = await Comment.find({ _id : postId });
       comments.sort(function (a, b) {
         return b.updatedAt - a.updatedAt;
       });
@@ -155,6 +184,25 @@ router.get('/post/:postId', async function (req, res) {
     }
   });
 });
+
+
+//새로고침 후 다시 조회
+
+// router.get("/post/reload/:postId", async function (req, res) {
+//   const { postId } = req.params;
+//   Post.findById(postId, async function (err, post) {
+//     if (!err) {
+//       let comments = await Comment.find({ postId: postId });
+//       comments.sort(function (a, b) {
+//         return b.updatedAt - a.updatedAt;
+//       });
+//       res.json({ ok: true, post, comments });
+//     } else {
+//       res.json({ ok: false, post: {}, comments: {} });
+//     }
+//   });
+// });
+
 
 
 router.get('/post/')
