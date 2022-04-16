@@ -92,14 +92,14 @@ router.put("/post/put/:postId", upload.single('imageUrl'), authmiddlewares, asyn
       // userId: userId,
       category,
       title,
-      imageUrl,
+      imageUrl, 
       content,
       // date: date
     },
   })
   res.json({ success: true, message: "수정이 완료됐습니다." });
 });
-
+ 
 
 
 
