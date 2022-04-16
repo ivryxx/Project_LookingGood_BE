@@ -93,10 +93,11 @@ router.put("/post/put/:postId", upload.single('imageUrl'), authmiddlewares, asyn
   const date =
     year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
   const { postId } = req.params;
+
   const { category, title, content } = req.body;
   const imageUrl = req.file.location;
   await Post.updateOne({ _id: postId }),
-    {
+    { 
       $set: {
         category,
         title,
@@ -134,6 +135,7 @@ router.put("/post/put/:postId", upload.single('imageUrl'), authmiddlewares, asyn
 router.get("/post", async (req, res) => {
   const Posts = await Post.find();
   res.json({ list: Posts });
+  console.log(list)
 });
 // 상세 페이지 접속
 router.get('/post/detail/:postId', async function (req, res) {
