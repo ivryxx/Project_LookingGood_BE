@@ -134,7 +134,8 @@ router.put("/post/put/:postId", upload.single('imageUrl'), authmiddlewares, asyn
 // 전체 게시글 조회 //
 router.get("/post", async (req, res) => {
   const Posts = await Post.find();
-  res.json({ list: Posts });
+  const Comments[] = await Post.find({channelName});
+  res.json({list: Posts});
   console.log(list)
 });
 // 상세 페이지 접속
@@ -142,7 +143,7 @@ router.get('/post/detail/:postId', async function (req, res) {
   const { postId } = req.params;
   Post.findById(postId, async function (err, post) {
     if (!err) {
-      let comments = await Comment.find({ _id : postId });
+      let comments = await Comments.find({ _id : postId });
       comments.sort(function (a, b) {
         return b.updatedAt - a.updatedAt;
       });
